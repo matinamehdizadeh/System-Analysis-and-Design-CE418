@@ -6,6 +6,7 @@ a Web Application for:
 
 newest feature that has been added to the project is the ability to monitor users view map and geograpfic location. this features can be accessed through /map api.
 
+This project has been developed as CE40418 (System Analysis & Design) course project, Fall 2021. 
 # Requirements
 
 * Install [Docker](https://docs.docker.com/engine/install/debian/) and [docker-compose](https://docs.docker.com/compose/install/) on your system
