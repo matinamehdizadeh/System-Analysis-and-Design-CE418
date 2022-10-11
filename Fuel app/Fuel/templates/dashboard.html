@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}
+DashBoard
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row card-panel s12">
+        <div class="container">
+            <form class="col s12 align-center" method="post">
+                {% csrf_token %}
+
+                {% if no_open_request %}
+                {{ form.as_p }}
+                <button class="btn waves-effect waves-light" type="submit" name="action">Request Fuel</button>
+
+                {% if error %}
+                <div id="error">
+                    something went wrong!
+                </div>
+                {% endif %}
+
+                {% elif request_assigned %}
+                <b> a delivery agent is coming to you! </b> <br>
+                first name: {{ agent_first_name }} <br>
+                last name: {{ agent_last_name }} <br>
+                car licence: {{ agent_car_licence }} <br>
+                phone number: {{ agent_phone_number }} <br>
+
+                {% if error %}
+                <div id="error">
+                    something went wrong!
+                </div>
+                {% endif %}
+
+                {% else %}
+                <b> your request successfully sent to server.
+                    we are processing your request.
+                    this page would refresh automatically when a delivery agent found for you.
+                </b>
+
+                {% if error %}
+                <div id="error">
+                    something went wrong!
+                </div>
+                {% endif %}
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var myInterval;
+        var previous_result;
+        $.ajax({
+            url: "check-agent-available/",
+            success: function (result) {
+                if (result !== null) {
+                    previous_result = result;
+                }
+            },
+            error: function (result) {
+                // alert('error');
+            }
+        });
+        myInterval = setInterval(waitForDriver, 1000);
+        function waitForDriver() {
+            $.ajax({
+                url: "check-agent-available/",
+                success: function (result) {
+                    if (result !== null && result !== previous_result) {
+                        location.reload();
+                    }
+                },
+                error: function (result) {
+                    // alert('error');
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}

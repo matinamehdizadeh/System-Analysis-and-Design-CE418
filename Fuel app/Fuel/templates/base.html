@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style>
+        .rtl {
+            direction: rtl;
+        }
+    </style>
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+</head>
+
+<body>
+    <nav class="blue darken-2">
+        <div class="nav-wrapper row">
+            <div id="navbar">
+                <div class="col s5">
+                    <ul class="left">
+                        {% if request.user.is_authenticated %}
+                        <li><a id="logout" href="{% url 'Fuel:logout' %}"><i
+                                    class="material-icons left">logout</i>Logout</a></li>
+                        <!-- authenticated navbar options -->
+                        {% else %}
+                        <li><a id="login" href="{% url 'Fuel:login' %}"><i
+                                    class="material-icons left">login</i>Login</a></li>
+                        <li><a id="register" href="{% url 'Fuel:register' %}"><i
+                                    class="material-icons left">add</i>Register</a></li>
+                        {% endif %}
+                        <li><a id="homepage" href="{% url 'Fuel:index' %}"><i
+                                    class="material-icons left">home</i>Homepage</a></li>
+                    </ul>
+                </div>
+                <div class="col s7">
+                    <ul class="right">
+                        <li>Welcome to Fuel App</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% block body %}
+    {% endblock %}
+    <script>
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+    </script>
+</body>
+
+</html>

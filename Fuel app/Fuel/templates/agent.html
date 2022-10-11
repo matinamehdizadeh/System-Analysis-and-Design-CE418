@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}
+Agent Page
+{% endblock %}
+{% block body %}
+<div class="container">
+    <div id="status" class="row my-flex">
+        <div class="col s6">
+            {% csrf_token %}
+            <h3>
+                Your status is:
+                {% if status == 'av' %}
+                <div class="my-red">Available</div>
+                {% elif status == 'un' %}
+                <div class="my-red">Unavailable</div>
+                {% else %}
+                <div class="my-red">Occupied</div>
+                {% endif %}
+            </h3>
+
+            {% if status == 'oc' %}
+            <b> new Mission Available! </b> <br>
+            <b> Customer Information </b> <br>
+            first name: {{ user_first_name }} <br>
+            last name: {{ user_last_name }} <br>
+            car licence: {{ user_car_licence }} <br>
+            phone number: {{ user_phone_number }} <br>
+            address: {{ user_address }} <br>
+            amount: {{ user_amount }} <br>
+            <a onClick="done" class="waves-effect waves-light btn col s12" href="/mission-complete">Done</a>
+            {% endif %}
+        </div>
+
+    </div>
+    <div class="col s3 offset-s3">
+        {% if status != 'oc' %}
+        <a class="waves-effect waves-light btn" href="/change-status">
+            change your status
+        </a>
+        {% endif %}
+    </div>
+
+</div>
+<style>
+    .my-flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .my-red {
+        color: red;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var myInterval;
+        var previous_result;
+        $.ajax({
+            url: "check-request-assigned/",
+            success: function (result) {
+                if (result !== null) {
+                    previous_result = result;
+                }
+            },
+            error: function (result) {
+                // alert('error');
+            }
+        });
+        myInterval = setInterval(waitForDriver, 1000);
+        function waitForDriver() {
+            $.ajax({
+                url: "check-request-assigned/",
+                success: function (result) {
+                    if (result !== null && result !== previous_result) {
+                        location.reload();
+                    }
+                },
+                error: function (result) {
+                    // alert('error');
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock %}
